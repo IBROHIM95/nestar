@@ -8,3 +8,5 @@ export class AppResolver {
 
 }   
 }
+
+//GraphQL serverlarni hosil qilish uchun  Resolverlardan foydalanamiz
