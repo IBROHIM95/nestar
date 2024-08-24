@@ -11,18 +11,22 @@ import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
-  ConfigModule.forRoot(),  //APINI ISHLATISHGA IMKON BERADI
-  GraphQLModule.forRoot({
+  ConfigModule.forRoot(),  //.eny fayli ishlatish uchun kerakli package
+  GraphQLModule.forRoot({  //shu orqali biz o'zimizni tizimimizda GraphQLni yoqdik oldin REST API EDI
     driver: ApolloDriver,
     playground: true,
     uploads: false,
     autoSchemaFile: true
   }), 
-    ComponentsModule, DatabaseModule,
+    ComponentsModule, //hamma componentlarni yigib ko'prik vazifasini bajaryapdi
+     DatabaseModule,
    
   ],   
-  
-  controllers: [AppController],
+  //biz buni o'chirib qo'ysak ham bo'ladi sababi Rest ham GraphQL ham HTTP protokolda ishlaydi
+  controllers: [AppController], 
   providers: [AppService, AppResolver],
 })
 export class AppModule {}
+
+//APP.MODULE bizda markaziy bog'ichi hisoblanadi sababi hamma modullarimizni integratsiya bo'lgan
+// 
