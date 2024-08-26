@@ -11,28 +11,19 @@ export class MemberResolver {
    constructor(private readonly memberService: MemberService) {}
                // GQL uchun alohida string yozamiz js uchun alohida
    @Mutation(() => Member)  
-   @UsePipes(ValidationPipe)//xato bo'lganda o'tkazmayi
+  
    public async signup(@Args('input') input:MemberInput ): Promise<Member> {
-      try{
-       console.log('Mutation signup');
-       console.log('input:', input)
+      
+       console.log('Mutation: signup')
        return this.memberService.signup(input)
-      } catch(err) {
-        console.log('Error, signup', err);
-        throw new InternalServerErrorException(err)
-      }
-    
+       
    }
+
    @Mutation(() => Member)
-   @UsePipes(ValidationPipe)
+  
    public async login(@Args('input') input:LoginInput): Promise<Member> {
-      try{
-         console.log('Mutation login');
-         return this.memberService.login(input) 
-        } catch(err) {
-          console.log('Error, signup', err);
-          throw new InternalServerErrorException(err)
-        }
+      console.log('Mutation login');
+      return this.memberService.login(input) 
 
    }
 

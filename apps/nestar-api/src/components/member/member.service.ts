@@ -16,8 +16,8 @@ export class MemberService {
        const result = await this.memberModel.create(input);
        return result
     } catch(err) {
-       console.log('Error, Service.module', err);
-       throw new BadRequestException(err)
+       console.log('Error, Service.module', err.message);
+       throw new BadRequestException(Message.USED_MEMBERNICK_OR_PHONE)
     }
  }
     public async login(input: LoginInput): Promise<Member> {
