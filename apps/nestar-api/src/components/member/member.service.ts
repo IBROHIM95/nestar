@@ -16,6 +16,7 @@ export class MemberService {
     input.memberPassword = await this.authService.hashPassword(input.memberPassword)
     try{
        const result = await this.memberModel.create(input);
+        result.accessToken = await this.authService.createToken(result);
        return result
     } catch(err) {
        console.log('Error, Service.module', err.message);
@@ -23,6 +24,7 @@ export class MemberService {
     }
  }  // faqat createda try va catch ishlatamiz, chunki, database 
  //validation errorlarni yuboradi ular nostandart
+
     public async login(input: LoginInput): Promise<Member> {
       const {memberNick, memberPassword} = input;
       const response = await this.memberModel
@@ -38,6 +40,7 @@ export class MemberService {
 
       const isMatch = await this.authService.comparePassword(input.memberPassword, response.memberPassword)
       if (!isMatch) throw new InternalServerErrorException(Message.WRONG_PASSWORD)
+      response.accessToken = await this.authService.createToken(response)   
 
       return  response 
  }
