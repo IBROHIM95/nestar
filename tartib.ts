@@ -32,7 +32,12 @@ Interceptorlar serverga kerish va chiqish vaqtlarini ko'rsatadi
 Frontent validation, Pipe validation, serverda backend validation 
 va schemada database validation
 Fazalar - interceptor => pipe va guard => resolver => 
-service module => schema moudel => database => interceptor 
+service module => schema moudel => database => interceptor
+
+Authentication qilishni  3 usuli mavjud
+ 1.Sessions(Cookies)
+ 2.Tokens(Cookies)
+ 3. Tokens(headers)- mobile uchun ham
 */
 
 
