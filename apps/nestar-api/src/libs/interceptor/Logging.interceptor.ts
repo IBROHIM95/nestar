@@ -4,9 +4,9 @@ import { log } from 'console';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable()                   // implement- berilishi shart bo'lgan qolib
 export class LoggingInterceptor implements NestInterceptor {
-    private readonly logger: Logger = new Logger();
+    private readonly logger: Logger = new Logger(); //req va resni terminalda chiqarib beradi
 
   public intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const recordTime = Date.now();
@@ -18,6 +18,7 @@ export class LoggingInterceptor implements NestInterceptor {
     } else if (requestType === 'graphql') {
         // (1) print request
         const gqlcontext = GqlExecutionContext.create(context);
+                   //terminalda chiqaradi
         this.logger.log(`${this.stringify(gqlcontext.getContext().req.body)}`, 'REQUEST');
 
         // (2) Errors handing via GraphQl

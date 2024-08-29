@@ -8,20 +8,17 @@ import { Member } from '../../libs/dto/member/member';
 
 @Resolver()     //controll va rooterlar o'rnida ishlaydi va GarphQL APIlarni qurib beradi
 export class MemberResolver {
-   constructor(private readonly memberService: MemberService) {}
+   constructor(private readonly memberService: MemberService) {} //DI => object
                // GQL uchun alohida string yozamiz js uchun alohida
    @Mutation(() => Member)  
-  
-   public async signup(@Args('input') input:MemberInput ): Promise<Member> {
-      
+   public async signup(@Args('input') input:MemberInput ): Promise<Member> {   //GQLdan kelgan datani uchun @Argsni ishlatamiz  
        console.log('Mutation: signup')
        return this.memberService.signup(input)
        
    }
 
    @Mutation(() => Member)
-  
-   public async login(@Args('input') input:LoginInput): Promise<Member> {
+  public async login(@Args('input') input:LoginInput): Promise<Member> {
       console.log('Mutation login');
       return this.memberService.login(input) 
 

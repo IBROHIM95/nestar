@@ -19,13 +19,16 @@ import { T } from './libs/types/common';
     playground: true,
     uploads: false,
     autoSchemaFile: true,
+
+    // Global error handling- pipe, logic va databaseda errorlar bo'ladi
     formatError: (error: T) => {
       console.log('error:', error);
       const graphQLFormattedError = {
+        
         code: error?.extensions.code,
-        message:
+        message:  
          error?.extensions?.exception?.response?.message || error?.extensions?.response?.message || error?.message,
-      };
+      }; 
       console.log('GRAPHQL GLOBAL ERR:', graphQLFormattedError);
       return graphQLFormattedError
       
