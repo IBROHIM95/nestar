@@ -1,9 +1,15 @@
 import { Args, Mutation,Query, Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
-import { InternalServerErrorException, UsePipes, ValidationPipe } from '@nestjs/common';
+import { InternalServerErrorException, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { log } from 'console';
 import { Member } from '../../libs/dto/member/member';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { AuthMember } from '../auth/decorators/authMember.decorator';
+import { ObjectId } from 'mongoose';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { MemberType } from '../../libs/enums/member.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 
 @Resolver()     //controll va rooterlar o'rnida ishlaydi va GarphQL APIlarni qurib beradi
@@ -24,11 +30,32 @@ export class MemberResolver {
 
    }
   //Authenticated
+   @UseGuards(AuthGuard)
    @Mutation(() => String)
-   public async updateMember(): Promise<string> {
+   public async updateMember(@AuthMember('_id') memberId: ObjectId): Promise<string> {
+    
     console.log('Mutation updateMember');
     return this.memberService.updateMember()  
    }
+
+   @UseGuards(AuthGuard)
+   @Query(() => String)
+   public async checkAuth(@AuthMember('memberNick') memberNick: string): Promise<string>{
+    console.log('memberNick', memberNick);
+    return `hi ${memberNick}`
+    
+   }
+   @Roles(MemberType.USER, MemberType.AGENT)
+   @UseGuards(RolesGuard)
+   @Query(() => String)
+   public async checkAuthRoles(@AuthMember() authmember: Member): Promise<string>{
+    console.log('checkAuthRoles');
+    
+    // console.log('memberNick', memberNick);
+    return `hi ${authmember.memberNick},you are ${authmember.memberType} (memberId): ${authmember._id}`
+    
+   }
+
    
    @Query(() => String)
    public async getMember(): Promise<string> {
@@ -39,9 +66,12 @@ export class MemberResolver {
    /* ADMIN */
 
    //Authorization: ADMIN
+   @Roles(MemberType.ADMIN)
+   @UseGuards(RolesGuard)
    @Mutation(() => String)
-   public async getAllMemberByAdmin(): Promise<string>{
-    return ''
+   public async getAllMemberByAdmin(@AuthMember() authmember: Member): Promise<string>{
+     console.log('authmember.memberType:', authmember.memberType);  
+    return this.memberService.getAllMemberByAdmin()
    }
 
    //Authorization: ADMIN
