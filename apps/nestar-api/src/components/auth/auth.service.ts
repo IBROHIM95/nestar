@@ -17,7 +17,7 @@ export class AuthService {
     public async comparePassword(password: string, hashedPassword :string): Promise<boolean> {
         return await bcrypt.compare(password, hashedPassword)
     }
-
+      //Memberni tagidan accessTokenni qoshib qo'yadi, malumotdan Token yasaydi
     public async createToken(member: Member): Promise<string> {
         console.log('member', member);
         
@@ -30,7 +30,7 @@ export class AuthService {
         
         return await this.jwtService.signAsync(payload)
     }
-
+     // Tokenni ichidan malumotlarni oladi
     public async verifyToken(token: string): Promise<Member> {
         const member = await this.jwtService.verifyAsync(token);
         member._id = shapeIntoMongoDBObjectId( member._id)
