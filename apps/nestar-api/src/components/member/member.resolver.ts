@@ -1,9 +1,9 @@
 import { Args, Mutation,Query, Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
 import { InternalServerErrorException, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
-import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { AgentsInquery, LoginInput, MemberInput, MembersInquery } from '../../libs/dto/member/member.input';
 import { log } from 'console';
-import { Member } from '../../libs/dto/member/member';
+import { Member, Members } from '../../libs/dto/member/member';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { ObjectId } from 'mongoose';
@@ -22,14 +22,14 @@ export class MemberResolver {
    @Mutation(() => Member)  
    public async signup(@Args('input') input:MemberInput ): Promise<Member> {   //GQLdan kelgan datani uchun @Argsni ishlatamiz  
        console.log('Mutation: signup')
-       return this.memberService.signup(input)
+       return await this.memberService.signup(input)
        
    }
 
    @Mutation(() => Member)
   public async login(@Args('input') input:LoginInput): Promise<Member> {
       console.log('Mutation login');
-      return this.memberService.login(input) 
+      return await this.memberService.login(input) 
 
    }
   //Authenticated
@@ -41,14 +41,14 @@ export class MemberResolver {
 ): Promise<Member> {
     console.log('Mutation updateMember');
     delete input._id
-    return this.memberService.updateMember(memberId, input)  
+    return await this.memberService.updateMember(memberId, input)  
    }
 
    @UseGuards(AuthGuard)
    @Query(() => String)
    public async checkAuth(@AuthMember('memberNick') memberNick: string): Promise<string>{
     console.log('memberNick', memberNick);
-    return `hi ${memberNick}`
+    return await `hi ${memberNick}`
     
    }
    @Roles(MemberType.USER, MemberType.AGENT)
@@ -58,7 +58,7 @@ export class MemberResolver {
     console.log('checkAuthRoles');
     
     // console.log('memberNick', memberNick);
-    return `hi ${authmember.memberNick},you are ${authmember.memberType} (memberId): ${authmember._id}`
+    return await `hi ${authmember.memberNick},you are ${authmember.memberType} (memberId): ${authmember._id}`
     
    }
 
@@ -68,25 +68,32 @@ export class MemberResolver {
     console.log('Query getMember');
     const targetId = shapeIntoMongoDBObjectId(input)
 
-    return this.memberService.getMember(memberId, targetId)  
+    return await this.memberService.getMember(memberId, targetId)  
+   }
+
+   @UseGuards(WithoutGuard)
+   @Query(() => Members)
+   public async getAgent(@Args('input') input: AgentsInquery, @AuthMember('_id') memberId: ObjectId): Promise<Members>{
+    console.log('Query getAgent');
+    return await this.memberService.getAgent(memberId, input)
    }
 
    /* ADMIN */
 
-   //Authorization: ADMIN
+  
    @Roles(MemberType.ADMIN)
    @UseGuards(RolesGuard)
-   @Mutation(() => String)
-   public async getAllMemberByAdmin(@AuthMember() authmember: Member): Promise<string>{
-     console.log('authmember.memberType:', authmember.memberType);  
-    return this.memberService.getAllMemberByAdmin()
+   @Query(() => Members)
+   public async getAllMemberByAdmin(@Args('input') input: MembersInquery): Promise<Members>{ 
+    return await this.memberService.getAllMemberByAdmin(input)
    }
 
-   //Authorization: ADMIN
-   @Mutation(() => String)
-   public async updateMemberByAdmin(): Promise<string> {
+   @Roles(MemberType.ADMIN)
+   @UseGuards(RolesGuard)
+   @Mutation(() => Member)
+   public async updateMemberByAdmin(@Args('input') input: MemberUpdate ): Promise<Member> {
     console.log('Mutation: updateMemberByAdmin');
-    return this.memberService.updateMemberByAdmin();
+    return await this.memberService.updateMemberByAdmin(input);
     
    }
 }

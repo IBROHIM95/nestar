@@ -1,6 +1,8 @@
-import { Field, InputType } from "@nestjs/graphql";
-import{IsNotEmpty, IsOptional, Length} from 'class-validator'
-import { MemberAuthType, MemberType } from "../../enums/member.enum";
+import { Field,  InputType, Int } from "@nestjs/graphql";
+import{IsIn, IsNotEmpty, IsOptional, Length, Min} from 'class-validator'
+import { MemberAuthType, MemberStatus, MemberType } from "../../enums/member.enum";
+import { availableAgentSorts, availableMemberSorts } from "../../config";
+import { Direction } from "../../enums/common.enum";
 
 
 
@@ -41,4 +43,80 @@ export class LoginInput {
     @Field(() => String)
     memberPassword: string
 
+}
+
+@InputType()
+class AIsearch {
+    @IsNotEmpty()
+    @Field(() => String, {nullable: true})
+    text?: string
+}
+
+@InputType()
+export class AgentsInquery {
+    @IsNotEmpty()
+    @Min(1)
+    @Field(() => Int)
+    page: number
+
+    @IsNotEmpty()
+    @Min(1)
+    @Field(() => Int)
+    limit: number
+
+    @IsOptional()
+    @IsIn(availableAgentSorts)
+    @Field(() => String, {nullable: true})
+    sort?: string
+
+    @IsOptional()
+    @Field(() => Direction, {nullable: true})
+    direction?:Direction
+
+    @IsNotEmpty()
+    @Field(() => AIsearch, {nullable: true} )
+    search: AIsearch
+}
+
+
+@InputType()
+class MIsearch {
+
+    @IsOptional()
+    @Field(() => MemberStatus, {nullable: true})
+    memberStatus?: MemberStatus
+
+    @IsOptional()
+    @Field(() => MemberType, {nullable: true})
+    memberType?: MemberType
+
+    @IsOptional()
+    @Field(() => String, {nullable: true})
+    text?: string
+}
+
+@InputType()
+export class MembersInquery {
+    @IsNotEmpty()
+    @Min(1)
+    @Field(() => Int)
+    page: number
+
+    @IsNotEmpty()
+    @Min(1)
+    @Field(() => Int)
+    limit: number
+
+    @IsOptional()
+    @IsIn(availableMemberSorts) //shuni ichidan boshqani talab qilib bo'lmaydi degani
+    @Field(() => String, {nullable: true})
+    sort?: string
+
+    @IsOptional()
+    @Field(() => Direction, {nullable: true})
+    direction?:Direction
+
+    @IsNotEmpty()
+    @Field(() => MIsearch, {nullable: true} )
+    search: MIsearch
 }
