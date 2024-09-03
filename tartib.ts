@@ -39,7 +39,19 @@ Authentication qilishni  3 usuli mavjud
  2.Tokens(Cookies)
  3. Tokens(headers)- mobile uchun ham
 
- 
+ Datalarni validate qilish uchun 'class-validate' dan foydalandik
+ Data validatelarni express.js da ham ishlatsak bo'ladi lekin faqat schemaga kirib
+ kelgandan so'ngishlatsa bo'ladi nest.js ga oxshab pipe, guardlari yoq
+ @Field- bu GQL uchun field
+ @Args- frontentdan malumotlarni olib kelib beradi
+
+ @Args('input') input:MemberInput - birinchi 'input'da @Args GQLning ichida kelayotgan
+ data, ikkinchi input kiritayotgan data 
+
+ if faqat truth va false tekshiradi, truenimas
+ @ObjectType- GQL orqali chiqib ketayotgan datalarga beramiz
+ @InputType- GQL orqali kirib kelayotgan datalar
+
 */
 
 

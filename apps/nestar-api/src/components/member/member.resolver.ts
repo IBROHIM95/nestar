@@ -21,9 +21,10 @@ import { Message } from '../../libs/enums/common.enum';
 @Resolver()     //controll va rooterlar o'rnida ishlaydi va GarphQL APIlarni qurib beradi
 export class MemberResolver {
    constructor(private readonly memberService: MemberService) {} //DI => object
+   
                // GQL uchun alohida string yozamiz js uchun alohida
-   @Mutation(() => Member)  
-   public async signup(@Args('input') input:MemberInput ): Promise<Member> {   //GQLdan kelgan datani uchun @Argsni ishlatamiz  
+   @Mutation(() => Member)
+     public async signup(@Args('input') input:MemberInput ): Promise<Member> {   //GQLdan kelgan datani uchun @Argsni ishlatamiz  
        console.log('Mutation: signup')
        return await this.memberService.signup(input)
        

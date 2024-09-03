@@ -12,7 +12,7 @@ export class PropertyService {
     constructor (
         //PropertyModel shu tarzda chaqirib olinadi
         @InjectModel('Property') private readonly propertyModel: Model<Property>,
-        private memberService :MemberService
+        private memberService: MemberService
 ) {}
 
     public async createProperty(input:PropertyInput ): Promise<Property> {
@@ -20,7 +20,7 @@ export class PropertyService {
             const result = await this.propertyModel.create(input);
             await this.memberService.memberStatsEditor({
                 _id: result.memberId, 
-                targetKey: 'memberProperty',
+                targetKey: 'memberProperties',
                 modifier: 1
             })
             return result

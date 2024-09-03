@@ -18,9 +18,9 @@ export class PropertyResolver {
     @Mutation(() => Property)
     public async createProperty(
         @Args('input') input:PropertyInput,
-        @AuthMember() memberId: ObjectId
+        @AuthMember('_id') memberId: ObjectId
     ): Promise<Property> {
-        console.log('createProperty');
+        console.log('Mutation: createProperty');
         input.memberId= memberId
         
        return await this.propertyService.createProperty(input) 
