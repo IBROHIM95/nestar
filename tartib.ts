@@ -38,6 +38,8 @@ Authentication qilishni  3 usuli mavjud
  1.Sessions(Cookies)
  2.Tokens(Cookies)
  3. Tokens(headers)- mobile uchun ham
+
+ 
 */
 
 
