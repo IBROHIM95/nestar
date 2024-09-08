@@ -52,6 +52,46 @@ Authentication qilishni  3 usuli mavjud
  @ObjectType- GQL orqali chiqib ketayotgan datalarga beramiz
  @InputType- GQL orqali kirib kelayotgan datalar
 
+ Modullarni servicega chaqirib olish uchun Modulning provider
+ qismida Service va Resolverni beramiz va Servisning constructor
+ qismiga @InjectModuleni berib private readonly model: Model<type>
+ ni beramiz.
+ Resolver qismiga Service chaqirib olish uchun ham   constructor 
+ qismiga private readonly service: Service deb yozamiz
+
+ Nest.jsda ikkita arcitectual pattern va ikkita design patternlardan
+ foydalanamiz. 
+MVC va DI Arcitectual va Decorator & middleware design patternlar
+
+jwtService- bu malumotlarni xavfsiz tarzdauzatish uchun
+ishlatilinadigan standart, buni ishlatish uchun modulning imports
+qismiga JwtModule.register({
+secret: 'proccess.env.Secret_token', 
+signOption: {expires: 60}
+
+}) va service qismida payloadni yaratib olamiz va 
+ return this.jwtService.signAsync(Payload) orqali JWT tokenni
+ yaratib olamiz
+
+ Object.keys- asosan objectlarning dinamik xususiyatlarini olish va 
+ ularga ishlov berish ishlatilinadi
+
+ [_doc] - mongoose objecti orqali malumotlarni olasiz, maxfiy yoki 
+ qo'shimcha malumotlarni chiqarib tashlash uchun ishlatilinadi
+
+ Bir modelni boshqa modelni ichida ishlatish uchun export bo'layotgan model model papkasini
+ ichida exportga Serviceni yozadi va import qilayotgan mdelni o'zining
+ importida yozadi
+
+ jwtService.signAsync orqali datani tooken qilamiz va 
+ jwtService.verifyAsync orqali tokenlarni dataga aylantirayapmiz
+
+ authentication- bu kim request qilayotganini aniqlaydi
+ authorization - bu qanaqa permitlari borligini ham ko'rsatib beradi
+return true - bo'lsa keyingi proccessga otkizadi
+
+nest g app nestar-batch - yangi monerepo server
+
 */
 
 

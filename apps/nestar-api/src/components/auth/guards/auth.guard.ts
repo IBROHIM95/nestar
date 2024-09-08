@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
 			console.log('memberNick[auth] =>', authMember.memberNick);
 			request.body.authMember = authMember;
 
-			return true;
+			return true; 
 		}
 
 		// description => http, rpc, gprs and etc are ignored

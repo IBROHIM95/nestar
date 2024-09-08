@@ -1,13 +1,16 @@
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver, Query} from '@nestjs/graphql';
 import { PropertyService } from './property.service';
-import { Property } from '../../libs/dto/property/property';
-import { PropertyInput } from '../../libs/dto/property/property.input';
+import { Properties, Property } from '../../libs/dto/property/property';
+import { AgentPropertiesInquery, AllPropertiesInquery, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { UseGuards } from '@nestjs/common';
 import { MemberType } from '../../libs/enums/member.enum';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
-import { ObjectId } from 'mongoose';
+import { ObjectId,  } from 'mongoose';
+import { WithoutGuard } from '../auth/guards/without.guard';
+import { shapeIntoMongoDBObjectId } from '../../libs/config';
+import { PropertyUpdate } from '../../libs/dto/property/property.update';
 
 @Resolver()
 export class PropertyResolver {
@@ -25,4 +28,93 @@ export class PropertyResolver {
         
        return await this.propertyService.createProperty(input) 
     }
+
+    @UseGuards(WithoutGuard)
+    @Query((returns) => Property)
+    public async getProperty(
+        @Args('propertyId') input: string,
+        @AuthMember('_id') memberId : ObjectId
+    ): Promise<Property> {
+        const propertyId = shapeIntoMongoDBObjectId(input)
+       console.log('Query: getProperty');
+       return await this.propertyService.getProperty(memberId, propertyId )
+       
+    }
+
+    @Roles(MemberType.AGENT)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => Property)
+    public async updateProperty(
+        @Args('input') input: PropertyUpdate,
+        @AuthMember('_id') memberId : ObjectId
+    ): Promise<Property> {
+        const propertyId = shapeIntoMongoDBObjectId(input._id)
+       console.log('Mutation: updateProperty');
+       return await this.propertyService.updateProperty(memberId, input )
+       
+    }
+
+    @UseGuards(WithoutGuard)
+    @Query((returns) => Properties)
+    public async getProperties(
+        @Args('input') input: PropertiesInquiry,
+        @AuthMember('_id') memberId : ObjectId
+    ): Promise<Properties> {
+        
+       console.log('Query: getProperties');
+       return await this.propertyService.getProperties(memberId, input )
+       
+    }
+
+    @Roles(MemberType.AGENT)
+    @UseGuards(RolesGuard)
+    @Query((returns) => Properties)
+    public async getAgentProperties(
+        @Args('input') input: AgentPropertiesInquery,
+        @AuthMember('_id') memberId : ObjectId,
+    ): Promise<Properties> {
+       console.log('Mutation: getAgentProperties');
+       return await this.propertyService.getAgentProperties(memberId, input )
+       
+    }
+
+
+    /** ADMIN  */
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Query((returns) => Properties)
+    public async getAllPropertiesByAdmin(
+        @Args('input') input: AllPropertiesInquery,
+        @AuthMember('_id') memberId : ObjectId,
+    ): Promise<Properties> {
+       console.log('Mutation: getAllPropertiesByAdmin');
+       return await this.propertyService.getAllPropertiesByAdmin( input )
+       
+    }
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => Property)
+    public async updatePropertyByAdmin(
+    @Args('input') input: PropertyUpdate): Promise<Property> {
+        console.log('Mutation: updatePropertyByAdmin');
+        input._id = shapeIntoMongoDBObjectId(input._id)
+       return await this.propertyService.updatePropertyByAdmin( input )
+       
+    }
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => Property)
+    public async removePropertyByAdmin(
+    @Args('propertyId') input: string): Promise<Property> {
+        console.log('Mutation: updatePropertyByAdmin');
+       const propertyId = shapeIntoMongoDBObjectId(input)
+       return await this.propertyService.removePropertyByAdmin( propertyId )
+       
+    }
+
+
+
 }

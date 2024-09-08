@@ -55,7 +55,7 @@ export class MemberResolver {
     return await `hi ${memberNick}`
     
    }
-   @Roles(MemberType.USER, MemberType.AGENT)
+   @Roles(MemberType.USER, MemberType.AGENT) //authorization
    @UseGuards(RolesGuard)
    @Query(() => String)
    public async checkAuthRoles(@AuthMember() authmember: Member): Promise<string>{
