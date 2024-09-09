@@ -12,7 +12,10 @@ export const availablePropertySort = [
 	'propertyRank',
 	'propertyPrice',
 
-]
+];
+
+export const availableBoardArticleSorts = ['createdAt', 'updatedAt', 'articleLikes', 'articleViews']
+export const availableCommentSorts = ['createdAt', 'updatedAt']
 
 
 // IMAGE CONFIGURATION (config.js)

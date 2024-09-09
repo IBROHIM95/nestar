@@ -75,6 +75,7 @@ export class PropertyUpdate {
   @Field(() => Boolean, {nullable:true})
   propertyRent?: boolean
 
+  
   soldAt?: Date;
 
   deletedAt?: Date;
