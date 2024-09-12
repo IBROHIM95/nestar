@@ -12,6 +12,8 @@ export class PropertyInput {
   @Field(() => PropertyType)
   propertyType: PropertyType  
 
+  @Field(() => PropertyStatus)
+ propertyStatus: PropertyStatus;
   
   
   @IsNotEmpty()

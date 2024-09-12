@@ -11,12 +11,16 @@ import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import { BoardArticleUpdate } from '../../libs/dto/board-article/board-article.update';
 import { lookupMember, shapeIntoMongoDBObjectId } from '../../libs/config';
+import { LikeInput } from '../../libs/dto/like/like.input';
+import { LikeGroup } from '../../libs/enums/like.enum';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class BoardArticleService {
     constructor(@InjectModel('BoardArticle') private readonly boardArticleModule: Model<BoardArticle>,
      private memberService: MemberService,
-     private viewService: ViewService
+     private viewService: ViewService,
+     private likeService: LikeService
    ) {} 
 
    public async createBoardArticle(memberId: ObjectId, input: BoardArticleInput): Promise<BoardArticle> {
@@ -39,7 +43,7 @@ export class BoardArticleService {
    public async getBoardArticle(memberId: ObjectId, articleId: ObjectId ): Promise<BoardArticle> {
      const search: T = {
         _id: articleId,
-        articlStatus: BoardArticleStatus.ACTIVE,
+        articleStatus: BoardArticleStatus.ACTIVE,
      };
 
      const targetBoardArticle: BoardArticle = await this.boardArticleModule.findOne(search).lean().exec()
@@ -53,6 +57,8 @@ export class BoardArticleService {
             targetBoardArticle.articleViews++
         }
      } 
+     const likeInput = {memberId: memberId, likeRefId: articleId, likeGroup: LikeGroup.ARTICLE}
+     targetBoardArticle.meLiked= await this.likeService.checkLikeExistence(likeInput)
 
      targetBoardArticle.memberData = await this.memberService.getMember(null, targetBoardArticle.memberId)
      return targetBoardArticle
@@ -115,6 +121,22 @@ export class BoardArticleService {
         return result[0]
    }
 
+   public async likeTargetBoardArticle(memberId: ObjectId, likeRefId: ObjectId): Promise<BoardArticle>{
+    const target: BoardArticle= await this.boardArticleModule.findOne({_id: likeRefId, articleStatus: BoardArticleStatus.ACTIVE}).exec()
+    if(!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND)
+  
+     const input: LikeInput = {
+        memberId: memberId,
+        likeRefId: likeRefId,
+        likeGroup: LikeGroup.ARTICLE
+     }
+  
+     const modifier: number = await this.likeService.toggleLike(input)
+     const result = await this.boartArticleStatsEditor({_id:likeRefId, targetKey: 'articleLikes', modifier: modifier })
+  
+     if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG)
+        return result
+  }
    
    public async getAllBoardArticlesByAdmin( input: AllBoardArticlesInquiry): Promise<BoardArticles> {
      const {articleCategory, articleStatus} = input.search

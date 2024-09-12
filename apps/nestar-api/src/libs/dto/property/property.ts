@@ -3,6 +3,7 @@ import { ObjectId } from 'mongoose'
 import { MemberAuthType, MemberStatus, MemberType } from '../../enums/member.enum';
 import { PropertyLocation, PropertyStatus, PropertyType } from '../../enums/property.enum';
 import { Member, TotalCounter } from '../member/member';
+import { MeLiked } from '../like/like';
 
 //backenddan clientga boradigan malumotlarni dtoqiladi
 @ObjectType()
@@ -11,7 +12,10 @@ export class Property {
  _id: ObjectId;
 
  @Field(() => PropertyType)
- propertyType: PropertyType;s
+ propertyType: PropertyType;
+
+ @Field(() => PropertyStatus)
+ propertyStatus: PropertyStatus;
 
  @Field(() => PropertyLocation)
  propertyLocation: PropertyLocation;
@@ -86,6 +90,8 @@ export class Property {
  @Field(() => Member, {nullable: true})
  memberData?: Member 
 
+ @Field(() => [MeLiked], {nullable:true})
+ meLiked?: MeLiked[]
  
 } 
 
