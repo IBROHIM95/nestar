@@ -92,6 +92,9 @@ return true - bo'lsa keyingi proccessga otkizadi
 
 nest g app nestar-batch - yangi monerepo server
 
+
+malumot qaytadigan dto larga @ObjectTypeni beramiz
+
 */
 
 
