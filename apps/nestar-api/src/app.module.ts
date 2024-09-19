@@ -9,6 +9,7 @@ import { ComponentsModule } from './components/components.module';
 import { DatabaseModule } from './database/database.module';
 
 import { T } from './libs/types/common';
+import { SocketModule } from './socket/socket.module';
 
 
 
@@ -36,7 +37,8 @@ import { T } from './libs/types/common';
     }
   }), 
     ComponentsModule, //hamma componentlarni yigib ko'prik vazifasini bajaryapdi
-     DatabaseModule,
+     DatabaseModule, 
+     SocketModule,
    
   ],   
   //biz buni o'chirib qo'ysak ham bo'ladi sababi Rest ham GraphQL ham HTTP protokolda ishlaydi
