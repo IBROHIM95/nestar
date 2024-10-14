@@ -95,6 +95,51 @@ nest g app nestar-batch - yangi monerepo server
 
 malumot qaytadigan dto larga @ObjectTypeni beramiz
 
+main.ts da
+bootstrap functionda const app = await NestFactory.create(AppModule);
+await app.listen(proccess.env.PORT_API ?? 3000)
+NEST.JS NING tez ishlashi sababi methodga kirmasdan tkshiradi
+@Module decoratirining propertlari bu imports, exports, controller[controller],
+ provider[service, resolver]
+ gql api ham rest api hem HTTP protokolda ishlaydi shuning uchun bir birini rad etmaydi
+ registerEnumType(PropertyType, {
+ name: 'PropertyType'}) - gqlga tanishtirishdir. agar shunday qilmasak gql API TANIMAYDI
+ claster => database => collections=> document=> dataSet 
+ sckhemada required bolsa - frontentdan kelmasa xatolik beradi
+
+ class-validatorlarning qulayligi - kirib kelishidan oldin validate qiladi
+ @IsNotempty
+ @Length(1, 12)
+
+
+ @Resolver()
+ export class MemberResolver() {
+ constructor(private readonly memberService: MemberService)
+
+ @Mutation(() => Memeber)
+ public async signup(@Args('input') input: MemberInput): Promise<Member> {
+ return await this.memberService.signUp
+ 
+ }
+
+ @InjectAble()
+ export class MemberService  {
+  constructor(@InjectModel(name: Member) private readonly memberModel: Model<Member>  ) {}
+
+  public async signUp(input: memberInput): Promise<Member> {
+  const {} input
+  if ning qavsini ichidagi yani condition to'g'ri
+  bo'lsagina keyingi bosqichga o'tkizadi
+  
+  @UseGuard(AuthGuard) - faqatgina login bo'lgan yoki bo'lmaganligini requestlardatekshiradi
+  
+  @Roles(MemberType.user, MemberType.ADMIN)
+  @UseGuard(RoleGuard) - login bo'lgandan tashqari qanday imkoniyatlar egaligini ham yani 
+  adminmi yoki usermi shularni ham tekshiradi
+  }
+ }
+ 
+ }
 */
 
 
