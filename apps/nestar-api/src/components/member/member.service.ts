@@ -150,7 +150,7 @@ public async likeTargetMember(memberId: ObjectId, likeRefId: ObjectId): Promise<
       return result
 }
 
-    public async getAllMemberByAdmin(input: MembersInquiry): Promise<Members> {
+    public async getAllMembersByAdmin(input: MembersInquiry): Promise<Members> {
       const{memberStatus, memberType, text} = input.search
       const match: T = {};
       const sort : T = {[input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC}

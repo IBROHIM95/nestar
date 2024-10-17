@@ -188,7 +188,7 @@ class APISearch {
 }
 
 @InputType()
-export class AgentPropertiesInquery {
+export class AgentPropertiesInquiry {
   @IsNotEmpty()
   @Min(1)
   @Field(() => Int)
@@ -231,7 +231,7 @@ class ALPISearch {
 }
 
 @InputType()
-export class AllPropertiesInquery {
+export class AllPropertiesInquiry {
   @IsNotEmpty()
   @Min(1)
   @Field(() => Int)

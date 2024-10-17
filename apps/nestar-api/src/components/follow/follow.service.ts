@@ -52,7 +52,7 @@ export class FollowService {
         const result = await this.followModel.findOneAndDelete({
             followingId: followingId,
             followerId: followerId
-        })
+        }).exec()
         await this.memberService.memberStatsEditor({_id:followerId, targetKey:'memberFollowings', modifier: -1 })
         await this.memberService.memberStatsEditor({_id:followingId,  targetKey:'memberFollowers', modifier: -1 })
  

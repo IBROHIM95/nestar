@@ -22,30 +22,34 @@ export class MemberUpdate {
 
     @IsOptional()    
     @Field(() => String, {nullable: true})
-    memberPhone: string
+    memberPhone?: string
 
     @IsOptional()
     @Length(3, 12)
     @Field(() => String, {nullable: true})
-    memberNick: string
+    memberNick?: string
 
     @IsOptional()
     @Length(5, 12)
     @Field(() => String, {nullable: true})
-    memberPassword: string
+    memberPassword?: string
 
     @IsOptional()
     @Length(5, 12)
     @Field(() => String, {nullable: true})
-    memberFullName: string
+    memberFullName?: string
 
     @IsOptional()
     @Field(() => String, {nullable: true})
-    memberImage: string
+    memberImage?: string
 
     @IsOptional()
     @Field(() => String, {nullable: true})
-    memberDesc: string
+    memberAddress?: string
+
+    @IsOptional()
+    @Field(() => String, {nullable: true})
+    memberDesc?: string
 
     deletedAt?: Date;
 }

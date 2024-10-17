@@ -4,14 +4,14 @@ import { PropertyModule } from './property.module';
 import { Model, ObjectId } from 'mongoose';
 import { Properties, Property } from '../../libs/dto/property/property';
 import { Direction, Message } from '../../libs/enums/common.enum';
-import { AgentPropertiesInquery, AllPropertiesInquery, OrdinaryInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
+import { AgentPropertiesInquiry, AllPropertiesInquiry, OrdinaryInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 import { MemberService } from '../member/member.service';
 import { PropertyStatus } from '../../libs/enums/property.enum';
 import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import { ViewService } from '../view/view.service';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
-import  moment from 'moment';
+import * as moment from 'moment';
 import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoDBObjectId } from '../../libs/config';
 import { LikeService } from '../like/like.service';
 import { LikeInput } from '../../libs/dto/like/like.input';
@@ -182,7 +182,7 @@ export class PropertyService {
     }
 
 
-    public async getAgentProperties(memberId: ObjectId , input: AgentPropertiesInquery): Promise<Properties> {
+    public async getAgentProperties(memberId: ObjectId , input: AgentPropertiesInquiry): Promise<Properties> {
       const {propertyStatus} = input.search;
       if (propertyStatus === PropertyStatus.DELETE) throw new BadRequestException(Message.NOT_ALLOWED_REQUEST);
 
@@ -232,7 +232,7 @@ export class PropertyService {
             return result
       }
     
-    public async getAllPropertiesByAdmin( input: AllPropertiesInquery): Promise<Properties> {
+    public async getAllPropertiesByAdmin( input: AllPropertiesInquiry): Promise<Properties> {
       const {propertyStatus, propertyLocationList} = input.search;
       
       const match: T = {};
